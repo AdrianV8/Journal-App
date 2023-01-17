@@ -24,7 +24,7 @@ export const authSlice = createSlice({
 
         // Verificar si el usuario está autenticado o no
         checkingCredentials: (state) => {
-
+            state.status = true;
         }
     }
 })
