@@ -1,5 +1,5 @@
 import { singInWithGoogle } from "../../firebase/providers";
-import { checkingCredentials } from "./authSlice";
+import { checkingCredentials, login, logout } from "./authSlice";
 
 // Autencicación con usuario y contraseña
 export const checkingAuthentication = (email, password) => {
@@ -19,7 +19,12 @@ export const startGoogleSingIn = () => {
         dispatch( checkingCredentials() );
 
         const result = await singInWithGoogle();
-        console.log({result});
+
+        // Si se cancela o salta  un error en el inicio de sesión
+        if( !result.ok ) return dispatch( logout(result.errorMessage) );
+
+        // En caso de que se inicie sesión correctamente
+        dispatch( login( result ) );
     }
 
 }
