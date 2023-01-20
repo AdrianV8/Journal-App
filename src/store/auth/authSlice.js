@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const authSlice = createSlice({
     name: 'counter',
     initialState: {
-        status: false,
+        status: 'checking',
         uid: null,
         email: null,
         displayName: null,
@@ -14,7 +14,7 @@ export const authSlice = createSlice({
 
         // Login usuario
         login: (state, { payload }) => {
-            state.status = true;
+            state.status = 'authenticated';
             state.uid = payload.uid;
             state.email = payload.email;
             state.displayName = payload.displayName;
@@ -24,7 +24,7 @@ export const authSlice = createSlice({
 
         // Logout usuario
         logout: (state, {payload}) => {
-            state.status = false;
+            state.status = 'non-authenticated';
             state.uid = null;
             state.email = null;
             state.displayName = null;
