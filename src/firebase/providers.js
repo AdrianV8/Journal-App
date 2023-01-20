@@ -1,9 +1,12 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseAuth } from "./config";
 
 const googleProvider = new GoogleAuthProvider();
 
-// Iniciar sesión con Google
+/**
+ * 
+ * @returns Iniciar sesión con Google
+ */
 export const singInWithGoogle = async() => {
     
     try {
@@ -19,7 +22,6 @@ export const singInWithGoogle = async() => {
         
     } catch (error) {
 
-        const errorCode = error.code;
         const errorMessage = error.message;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
@@ -31,13 +33,39 @@ export const singInWithGoogle = async() => {
     }
 }
 
-// Registro de usuario con correo y contraseña
+
+export const signInWithUserPassword = async({email, password}) => {
+    try {
+
+        const result = await signInWithEmailAndPassword(FirebaseAuth, email, password);
+        const { uid, photoURL, displayName } = result.user;
+        
+        return {
+            ok: true,
+            uid, photoURL, displayName,
+        }
+        
+    } catch (error) {
+        return{
+            ok: false,
+            errorMessage: 'Error al iniciar sesión',
+        }
+    }
+}
+
+/**
+ * 
+ * @param {email, password, displayName} param0 
+ * @returns Registro de usuario con correo y contraseña
+ */
 export const registerUserWithEmailPassword = async({email, password, displayName}) => {
     
     try {
         const resp = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
         const {uid, photoURL} = resp.user;
-        console.log(resp);
+        
+        // Actualizar el display en Firabase
+        await updateProfile(FirebaseAuth.currentUser, {displayName});
 
         return {
             ok: true,
@@ -45,8 +73,10 @@ export const registerUserWithEmailPassword = async({email, password, displayName
         }
         
     } catch (error) {
-        console.log(error);
-        return{ ok: false, errorMessage: error.message}
+        return{ ok: false, errorMessage: 'Error. Usuario ya registrado.'}
     }
+    
+}    
 
-}
+
+

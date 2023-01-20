@@ -23,13 +23,13 @@ export const authSlice = createSlice({
         }, 
 
         // Logout usuario
-        logout: (state, payload) => {
+        logout: (state, {payload}) => {
             state.status = false;
             state.uid = null;
             state.email = null;
             state.displayName = null;
             state.photoURL = null;
-            state.errorMessage = payload.errorMessage;
+            state.errorMessage = payload.errorMessage; // Se espera que el payload sea el mensaje de error
         },
 
         // Verificar si el usuario está autenticado o no

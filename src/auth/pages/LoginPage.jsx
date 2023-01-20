@@ -1,17 +1,17 @@
 import { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
-import { Button, Grid, TextField, Typography, Link } from '@mui/material'
+import { Button, Grid, TextField, Typography, Link, Alert } from '@mui/material'
 import { Google } from '@mui/icons-material'
 
 import { AuthLayout } from '../layout/AuthLayout'
 
 import { useForm } from '../../hooks/useForm'
-import { checkingAuthentication, startGoogleSingIn } from '../../store/auth/thunks'
+import { startGoogleSingIn, startLoginWithEmailPassword } from '../../store/auth/thunks'
 
 export const LoginPage = () => {
 
-  const { status } = useSelector( state => state.auth );
+  const { status, errorMessage } = useSelector( state => state.auth );
   const isAuthenticating = useMemo( () => status === true, [status] );
 
   // Dispatch para el login
@@ -19,20 +19,18 @@ export const LoginPage = () => {
 
   const { email, password, onInputChange } = useForm({
     email: 'adrian@gmail.com',
-    password: 12345,
+    password: '1234567',
   });
 
   const onSubmit = (event) =>{
     event.preventDefault();
 
-    console.log(email, password);
-    disPatch( checkingAuthentication() );
+    disPatch( startLoginWithEmailPassword(email, password) );
   }
 
   const onGoogleSignIn = () => {
     disPatch(startGoogleSingIn());
   }
-
 
   return (
     
@@ -51,13 +49,26 @@ export const LoginPage = () => {
               </Grid>
               
               <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={12} display={!!errorMessage ? '' : 'none' }>
+                  <Alert severity='error'>
+                      {errorMessage}
+                  </Alert>
+                </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Button type='submit' variant='contained' fullWidth disabled={isAuthenticating}>
+                  <Button 
+                    type='submit' 
+                    variant='contained' 
+                    fullWidth 
+                    disabled={isAuthenticating}>
                     Login
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Button onClick={onGoogleSignIn} variant='contained' fullWidth disabled={isAuthenticating}>
+                  <Button 
+                    onClick={onGoogleSignIn} 
+                    variant='contained' 
+                    fullWidth 
+                    disabled={isAuthenticating}>
                     <Google/>
                     <Typography sx={{ ml: 1 }}>Google</Typography>
                   </Button>

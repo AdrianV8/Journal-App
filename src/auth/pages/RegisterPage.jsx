@@ -1,18 +1,20 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { Button, Grid, TextField, Typography, Link } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { Button, Grid, TextField, Typography, Link, Alert } from '@mui/material'
 
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks'
 import { startCreatingUserWithEmailPassword } from '../../store/auth/thunks'
 
+// Plantilla de datos para rellenar el formulario.
 const formData = {
   email: 'adrian@gmail.com',
   password: '1234567',
   displayName: 'Adrian Lopera'
 }
 
+// Validación de cada campo.
 const formValidation = {
   email: [ (value) => value.includes('@') , 'El correo debe de contener una @.'],
   password: [ (value) => value.length >= 6 , 'La contraseña debe de tener 6 o más caracteres.'],
@@ -25,6 +27,11 @@ export const RegisterPage = () => {
 
   const [formSubmitted, setFormSubmitted] = useState(false)
 
+  const { status, errorMessage } = useSelector( state => state.auth );
+
+  // Deshabilitar el botón de enviar cuando este sea pulsado
+  const isCheckingAuthentication = useMemo( () => status === true, [status] );
+
   const { 
       formState, displayName, email, password, onInputChange, 
       isFormValid, displayNameValid, emailValid, passwordValid,
@@ -34,8 +41,9 @@ export const RegisterPage = () => {
     event.preventDefault();
     setFormSubmitted(true);
 
+    // Si no es válido, el formulario no se envía.
     if(!isFormValid) return;
-    
+
     // 'Despachamos' y enviamos los datos (formState)
     dispatch( startCreatingUserWithEmailPassword(formState) );
   }
@@ -67,8 +75,15 @@ export const RegisterPage = () => {
               </Grid>
               
               <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid 
+                  item 
+                  xs={12}
+                  display={!!errorMessage ? '' : 'none' } // Deshabilitar el cuadro de error
+                  >
+                  <Alert severity='error'>{ errorMessage }</Alert>
+                </Grid>
                 <Grid item xs={12} >
-                  <Button type='submit' variant='contained' fullWidth>
+                  <Button disabled={ isCheckingAuthentication } type='submit' variant='contained' fullWidth>
                     Crear cuenta
                   </Button>
                 </Grid>
