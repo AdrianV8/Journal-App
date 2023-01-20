@@ -49,7 +49,7 @@ export const useForm = ( initialForm = {}, formValidations = {} ) => {
         }
         
     }
-    console.log(formValidation);
+
     return {
         ...formState,
         formState,
