@@ -4,7 +4,8 @@ import { Grid, Typography } from "@mui/material"
 export const AuthLayout = ({children, title=''}) => {
   return (
     <>
-        <Grid 
+        <Grid
+            
             container 
             spacing={ 0 } 
             direction="column" 
@@ -15,7 +16,7 @@ export const AuthLayout = ({children, title=''}) => {
       
             <Grid 
                 item
-                className='box-shadow'
+                className='box-shadow animate__animated animate__fadeInDownBig'
                 xs={3}
                 sx={{ backgroundColor:'white', padding: 3, borderRadius: 2 , width: {md: '450px'} }}
             >
