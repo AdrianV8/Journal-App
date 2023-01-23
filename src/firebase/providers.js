@@ -33,7 +33,11 @@ export const singInWithGoogle = async() => {
     }
 }
 
-
+/**
+ * 
+ * @param {email, password} param0 
+ * @returns OK: True -> Devuelve ok: true y datos del usuario. OK: False -> ok: false y mensaje de error.
+ */
 export const signInWithUserPassword = async({email, password}) => {
     try {
 
@@ -76,7 +80,16 @@ export const registerUserWithEmailPassword = async({email, password, displayName
         return{ ok: false, errorMessage: 'Error. Usuario ya registrado.'}
     }
     
-}    
+}
+
+/**
+ * 
+ * @returns Logout del usuario
+ */
+export const logoutFirebaseUser = async() => {
+    return await FirebaseAuth.signOut();
+}
+
 
 
 

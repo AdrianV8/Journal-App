@@ -29,7 +29,8 @@ export const authSlice = createSlice({
             state.email = null;
             state.displayName = null;
             state.photoURL = null;
-            state.errorMessage = payload.errorMessage; // Se espera que el payload sea el mensaje de error
+            state.errorMessage = payload?.errorMessage; // Se espera que el payload sea el mensaje de error
+            // Si viene el Payload (payload?) busca el mensaje de error.
         },
 
         // Verificar si el usuario está autenticado o no
