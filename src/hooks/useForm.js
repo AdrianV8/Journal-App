@@ -9,6 +9,12 @@ export const useForm = ( initialForm = {}, formValidations = {} ) => {
       createValidator();
     }, [formState])
 
+    //Este useEffect se usará para cambiar el contenido del formulario al escoger una nota u otra.
+    useEffect(() => {
+        // Si el formulario cambia, que vuelva a llamar al formulario
+        setFormState(initialForm)
+    }, [initialForm])
+
     const isFormValid = useMemo( () => {
         /**
          * Si algunos de los campos es distinto a null (null = no hay errores)

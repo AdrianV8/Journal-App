@@ -8,7 +8,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
     const { displayName } = useSelector( state => state.auth );
     const { notes } = useSelector( state => state.journal );
     
-    console.log(notes);
+    
   return (
     <Box 
         component={'nav'}

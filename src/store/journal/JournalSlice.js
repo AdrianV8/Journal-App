@@ -29,11 +29,19 @@ export const journalSlice = createSlice({
         },
         // Guardar las notas
         setSaving: (state) => {
-
+            state.isSaving = true;
         },
         // Actualizar nota
-        updateNotes: (state, action) => {
-
+        updateNotes: (state, action) => { // Payload es una nota
+            state.isSaving = false;
+            state.notes = state.notes.map( note => {
+                
+                if(note.id === action.payload.id){
+                    return action.payload;
+                }
+                
+                return note;
+            });
         },
         // Borrar nota
         deleteNotes: (state, action) => {

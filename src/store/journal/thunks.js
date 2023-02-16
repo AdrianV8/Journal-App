@@ -1,7 +1,8 @@
+import { async } from "@firebase/util";
 import { collection, doc, setDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
 import { loadNotes } from "../../helpers";
-import { addNewEmptyNote, setActiveNote, savingNewNotes, setNotes } from "./";
+import { addNewEmptyNote, setActiveNote, savingNewNotes, setNotes, setSaving, updateNotes } from "./";
 
 /**
  * 
@@ -49,5 +50,27 @@ export const startLoadingNote = () => {
         const loadedNotes = await loadNotes(uid);
         dispatch(setNotes( loadedNotes ))
         
+    }
+}
+
+export const startSavingNote = () => {
+
+    return async(dispatch, getState) => {
+
+        dispatch( setSaving() );
+
+        const { uid } = getState().auth;
+        const { active:note } = getState().journal;
+
+        const noteToFireStore = {...note};
+        delete noteToFireStore.id;
+
+        // Referencia al documento (nota que queremos modificar)
+        const docRef = doc( FirebaseDB, `${uid}/journal/notes/${note.id}`);
+        await setDoc(docRef, noteToFireStore, { merge: true });
+
+        dispatch( updateNotes( note ) ) // mandamos la nota
+
+
     }
 }

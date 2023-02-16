@@ -9,6 +9,13 @@ import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks/useForm'
 import { startGoogleSingIn, startLoginWithEmailPassword } from '../../store/auth/thunks'
 
+
+const formData = {
+  email: 'adrian@gmail.com',
+  password: '1234567',
+};
+
+
 export const LoginPage = () => {
 
   const { status, errorMessage } = useSelector( state => state.auth );
@@ -17,10 +24,7 @@ export const LoginPage = () => {
   // Dispatch para el login
   const disPatch = useDispatch();
 
-  const { email, password, onInputChange } = useForm({
-    email: 'adrian@gmail.com',
-    password: '1234567',
-  });
+  const { email, password, onInputChange } = useForm(formData);
 
   const onSubmit = (event) =>{
     event.preventDefault();
