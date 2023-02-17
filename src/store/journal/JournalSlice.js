@@ -30,6 +30,7 @@ export const journalSlice = createSlice({
         // Guardar las notas
         setSaving: (state) => {
             state.isSaving = true;
+            state.messageSave = '';
         },
         // Actualizar nota
         updateNotes: (state, action) => { // Payload es una nota
@@ -42,6 +43,9 @@ export const journalSlice = createSlice({
                 
                 return note;
             });
+
+            state.messageSave = `La nota '${action.payload.title}' se modificó correctamente.`
+
         },
         // Borrar nota
         deleteNotes: (state, action) => {
