@@ -7,6 +7,13 @@ export const journalSlice = createSlice({
         messageSave: '',
         notes: [],
         active: null, // Nota activa. Esta llevará toda la información de la nota
+        // active: {
+        //     id: 'ABC',
+        //     title: '',
+        //     body: '',
+        //     date: 12345678910,
+        //     imageUrls: [],
+        // }
     },
     reducers: {
         // Evitar el posteo de las notas
@@ -47,6 +54,13 @@ export const journalSlice = createSlice({
             state.messageSave = `La nota '${action.payload.title}' se modificó correctamente.`
 
         },
+
+        // Establecer las fotos como activas en la nota
+        setPhotosToActiveNote: (state, action) => {
+            state.active.imageUrls = [ ...state.active.imageUrls, ...action.payload ];
+            state.isSaving = false;
+        },
+
         // Borrar nota
         deleteNotes: (state, action) => {
 
@@ -54,4 +68,4 @@ export const journalSlice = createSlice({
     }
 })
 // Action creators are generated for each case reducer function
-export const { savingNewNotes, addNewEmptyNote, setActiveNote, setNotes, setSaving, updateNotes, deleteNotes } = journalSlice.actions;
+export const { savingNewNotes, addNewEmptyNote, setActiveNote, setNotes, setSaving, updateNotes, setPhotosToActiveNote, deleteNotes } = journalSlice.actions;

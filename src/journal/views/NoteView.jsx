@@ -16,9 +16,9 @@ export const NoteView = () => {
     const dispatch = useDispatch();
 
     // Rescatar la nota activa para usarla en el useForm
-    const { active:note, messageSave, isSaving } = useSelector( state => state.journal );
+    const { active:note, messageSave, isSaving, active } = useSelector( state => state.journal ); 
     const { body, title, date, onInputChange, formState } = useForm(note);
-
+    
     // Obtener la fecha de la nota
     const dateString = useMemo(() => {
         let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -115,7 +115,7 @@ export const NoteView = () => {
 
         {/* Img gallery */}
 
-        <ImageGallery/>
+        <ImageGallery photoUpload={note.imageUrls}/>
 
     </Grid>
   )

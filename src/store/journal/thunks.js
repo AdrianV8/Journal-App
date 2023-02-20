@@ -2,7 +2,7 @@ import { async } from "@firebase/util";
 import { collection, doc, setDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
 import { fileUpload, loadNotes } from "../../helpers";
-import { addNewEmptyNote, setActiveNote, savingNewNotes, setNotes, setSaving, updateNotes } from "./";
+import { addNewEmptyNote, setActiveNote, savingNewNotes, setNotes, setSaving, updateNotes, setPhotosToActiveNote } from "./";
 
 /**
  * 
@@ -74,11 +74,23 @@ export const startSavingNote = () => {
 
     }
 }
-
+/**
+ * 
+ * @param {*} files 
+ * @returns Sube imagenes a la nube
+ */
 export const startUploadingFiles = ( files=[] ) => {
     return async(dispatch, getState) => {
         dispatch( setSaving() );
-        
-        await fileUpload( files[0]);
+
+        // await fileUpload( files[0]);
+        const fileUploadPromises = [];
+        // Creamos el arreglo de promesas con los archivos
+        for (const file of files) {
+            fileUploadPromises.push( fileUpload( file ) );
+        }
+
+        const photoUrls = await Promise.all( fileUploadPromises );
+        dispatch( setPhotosToActiveNote( photoUrls ) )
     }
 }
