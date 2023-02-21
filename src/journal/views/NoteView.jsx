@@ -1,14 +1,14 @@
 import { useMemo, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-import { SaveOutlined, UploadFile, UploadOutlined } from "@mui/icons-material"
+import { DeleteOutline, SaveOutlined, UploadFile, UploadOutlined } from "@mui/icons-material"
 import { Button, Grid, IconButton, TextField, Typography } from "@mui/material"
 import Swal from "sweetalert2"
 import 'sweetalert2/dist/sweetalert2.css'
 
 import { useForm } from "../../hooks"
 import { ImageGallery } from "../components"
-import { setActiveNote, startSavingNote, startUploadingFiles } from "../../store/journal"
+import { setActiveNote, startDeleteNote, startSavingNote, startUploadingFiles } from "../../store/journal"
 import { useRef } from "react"
 
 export const NoteView = () => {
@@ -18,7 +18,7 @@ export const NoteView = () => {
     // Rescatar la nota activa para usarla en el useForm
     const { active:note, messageSave, isSaving, active } = useSelector( state => state.journal ); 
     const { body, title, date, onInputChange, formState } = useForm(note);
-    
+
     // Obtener la fecha de la nota
     const dateString = useMemo(() => {
         let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -55,8 +55,17 @@ export const NoteView = () => {
         dispatch(startUploadingFiles( target.files ))
     }
 
+    const onDelete = () => {
+        // No hace falta enviarle el id de la nota, ya que se puede coger desde el store
+        dispatch( startDeleteNote() );
+        Swal.fire('Nota borrada', '', 'error');
+    }
+    
   return (
+    <>
+
     <Grid container direction={'row'} justifyContent='space-between' alignItems={'center'} sx={{mb: 1}}>
+        
         <Grid item>
             <Typography fontSize={32} fontWeight='light'> { capitalizarPrimeraLetra(dateString) } </Typography>
         </Grid>
@@ -75,7 +84,7 @@ export const NoteView = () => {
                 disabled={isSaving}
                 onClick={ () => fileInputRef.current.click() }
             >
-                <UploadOutlined/>
+                <UploadOutlined/>            
             </IconButton>
 
             <Button 
@@ -85,6 +94,15 @@ export const NoteView = () => {
                 sx={{p: 2}}> 
                 <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
                 Guardar
+            </Button>
+
+            <Button
+                data-swal-toast-template='#my-template'
+                disabled={ isSaving }
+                onClick={onDelete} 
+                color="error" 
+                sx={{p: 2}}> 
+                <DeleteOutline sx={{ fontSize: 30, mr: 1 }} />
             </Button>
         </Grid>
         <Grid container>
@@ -118,5 +136,6 @@ export const NoteView = () => {
         <ImageGallery photoUpload={note.imageUrls}/>
 
     </Grid>
+    </>
   )
 }
