@@ -3,6 +3,10 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore/lite"
+import { getEnvironments } from "../helpers";
+
+const env = getEnvironments();
+console.log(env);
 
 // Your web app's Firebase configuration
 // Configuración Producción
@@ -15,7 +19,6 @@ import { getFirestore } from "firebase/firestore/lite"
 //   appId: "1:833705680210:web:f11ed0874d16ade677ee8b",
 //   measurementId: "G-R139YJ9WJB"
 // };
-
 
 
 //test
